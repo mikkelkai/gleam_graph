@@ -52,6 +52,7 @@ fn dfs(
   }
 }
 
+/// Function that computes a breadth first search through the graph from a given node.
 pub fn breadth_first_search(
   g: Graph(vt, et),
   source: vt,
