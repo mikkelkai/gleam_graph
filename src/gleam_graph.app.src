@@ -1,5 +1,5 @@
 {application, gleam_graph,
- [{description, "A Gleam project"},
+ [{description, "A graph library"},
   {vsn, "0.1.0"},
   {registered, []},
   {applications,

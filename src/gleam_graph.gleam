@@ -159,29 +159,29 @@ pub fn out_degree(g: Graph(vt, et), node: vt) -> Result(Int, Nil) {
   Ok(list.length(edges))
 }
 
-/// Function that returns the edges going out of a node 
-pub fn reachable_edges(
+/// Function that returns a tuple describing what is reachable for a node.
+pub fn reachable(
   g: Graph(vt, et),
   node: vt,
-) -> Result(List(Edge(vt, et)), Nil) {
-  try edges = map.get(g.graph, node)
-  Ok(edges)
-}
-
-/// Function that returns the nodes which can be used to reached from a given node.
-pub fn reachable_nodes(g: Graph(vt, et), node: vt) -> Result(List(vt), Nil) {
+) -> Result(List(#(vt, Option(Float), Option(et))), Nil) {
   try edges = map.get(g.graph, node)
   Ok(list.map(
     edges,
     fn(edge) {
       case edge {
-        DirectedEdge(_, to, ..) -> to
-        UndirectedEdge(between, ..) ->
+        DirectedEdge(_, to, weight, data) -> #(to, weight, data)
+        UndirectedEdge(between, weight, data) ->
           case between.0 == node {
-            True -> between.1
-            False -> between.0
+            True -> #(between.1, weight, data)
+            False -> #(between.0, weight, data)
           }
       }
     },
   ))
+}
+
+/// Function that returns the nodes which can be used to reached from a given node.
+pub fn reachable_nodes(g: Graph(vt, et), node: vt) -> Result(List(vt), Nil) {
+  try r = reachable(g, node)
+  Ok(list.map(r, fn(edge: #(vt, Option(Float), Option(et))) { edge.0 }))
 }
