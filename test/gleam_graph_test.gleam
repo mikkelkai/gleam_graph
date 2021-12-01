@@ -3,13 +3,13 @@ import gleam/io
 import gleam/option.{None, Some}
 import gleam/erlang.{format}
 
-pub fn create_test() {
-  assert graph = gleam_graph.create()
+pub fn new_test() {
+  let graph = gleam_graph.new()
 
   assert 0 = gleam_graph.order(graph)
   assert 0 = gleam_graph.size(graph)
 
-  assert _graph =
+  let _graph =
     graph
     |> gleam_graph.add_node(10)
     |> gleam_graph.add_node(1)
@@ -21,8 +21,8 @@ pub fn create_test() {
 }
 
 pub fn order_test() {
-  assert graph =
-    gleam_graph.create()
+  let graph =
+    gleam_graph.new()
     |> gleam_graph.add_node(10)
     |> gleam_graph.add_node(1)
     |> gleam_graph.add_edge(1, 10, None)
@@ -37,8 +37,8 @@ pub fn order_test() {
 }
 
 pub fn size_test() {
-  assert graph =
-    gleam_graph.create()
+  let graph =
+    gleam_graph.new()
     |> gleam_graph.add_node(10)
     |> gleam_graph.add_node(1)
     |> gleam_graph.add_edge(1, 10, None)
@@ -51,8 +51,8 @@ pub fn size_test() {
 }
 
 pub fn out_degree_test() {
-  assert graph =
-    gleam_graph.create()
+  let graph =
+    gleam_graph.new()
     |> gleam_graph.add_node(10)
     |> gleam_graph.add_node(1)
     |> gleam_graph.add_edge(1, 10, None)
@@ -70,8 +70,8 @@ pub fn out_degree_test() {
 }
 
 pub fn reachable_edges_test() {
-  assert graph =
-    gleam_graph.create()
+  let graph =
+    gleam_graph.new()
     |> gleam_graph.add_node(10)
     |> gleam_graph.add_node(1)
     |> gleam_graph.add_edge(1, 10, None)
@@ -80,7 +80,7 @@ pub fn reachable_edges_test() {
     |> gleam_graph.add_undirected_edge(1, 2, None)
     |> gleam_graph.add_weighted_undirected_edge(5, 7, 0., None)
 
-  // TODO: Use sets to make ordering irrelevant
+  // TODO: Make ordering irrelevant
   assert Ok([#(2, None, None), #(10, None, None)]) =
     gleam_graph.reachable(graph, 1)
   assert Ok([#(1, None, None), #(9, None, None)]) =
@@ -93,8 +93,8 @@ pub fn reachable_edges_test() {
 }
 
 pub fn reachable_nodes_test() {
-  assert graph =
-    gleam_graph.create()
+  let graph =
+    gleam_graph.new()
     |> gleam_graph.add_node(10)
     |> gleam_graph.add_node(1)
     |> gleam_graph.add_edge(1, 10, None)
@@ -107,7 +107,7 @@ pub fn reachable_nodes_test() {
 
   io.println(format(x))
 
-  // TODO: Use sets to make ordering irrelevant
+  // TODO: Make ordering irrelevant
   assert Ok([2, 10]) = gleam_graph.reachable_nodes(graph, 1)
   assert Ok([1, 9]) = gleam_graph.reachable_nodes(graph, 2)
   assert Ok([7]) = gleam_graph.reachable_nodes(graph, 5)

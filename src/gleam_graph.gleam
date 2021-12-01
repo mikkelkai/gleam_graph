@@ -26,7 +26,7 @@ pub opaque type Graph(vt, et) {
 
 // Construction
 /// Function that creates a new empty graph.
-pub fn create() -> Graph(vt, et) {
+pub fn new() -> Graph(vt, et) {
   Graph(graph: map.new(), order: 0, size: 0)
 }
 
