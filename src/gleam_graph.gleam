@@ -163,9 +163,9 @@ pub fn out_degree(g: Graph(vt, et), node: vt) -> Result(Int, Nil) {
 pub fn reachable_edges(
   g: Graph(vt, et),
   node: vt,
-) -> Result(List(Edge(vt, et), Nil)) {
+) -> Result(List(Edge(vt, et)), Nil) {
   try edges = map.get(g.graph, node)
-  edges
+  Ok(edges)
 }
 
 /// Function that returns the nodes which can be used to reached from a given node.
@@ -175,7 +175,7 @@ pub fn reachable_nodes(g: Graph(vt, et), node: vt) -> Result(List(vt), Nil) {
     edges,
     fn(edge) {
       case edge {
-        DirectedEdge(to, ..) -> to
+        DirectedEdge(_, to, ..) -> to
         UndirectedEdge(between, ..) ->
           case between.0 == node {
             True -> between.1

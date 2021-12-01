@@ -75,5 +75,9 @@ pub fn reachable_nodes_test() {
     |> gleam_graph.add_undirected_edge(1, 2, None)
     |> gleam_graph.add_weighted_undirected_edge(5, 7, 0., None)
 
+  let x = gleam_graph.reachable_nodes(graph, 1)
+
+  io.println(format(x))
+
   assert Ok([2, 10]) = gleam_graph.reachable_nodes(graph, 1)
 }
