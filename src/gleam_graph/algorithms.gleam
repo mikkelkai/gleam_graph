@@ -14,6 +14,8 @@ import gleam/bool
 import gleam/float
 import gleam/option.{None, Option, Some}
 import gleam/io
+import data_structures/heap
+import data_structures/heap.{Heap}
 import gleam/erlang.{format}
 
 /// Function that computes a depth first search through the graph from a given node.
@@ -102,70 +104,51 @@ fn bfs(
   }
 }
 
-/// Function that computes a breadth first search through the graph from a given node.
+/// Function that computes shortest distance through the graph from a given node.
 pub fn dijkstra(g: Graph(vt, et), source: vt) -> Result(Map(vt, vt), Nil) {
   result.map(
     dijkstra_(
       g,
       set.new(),
-      map.new()
-      |> map.insert(source, 0.),
-      [#(source, source, 0.)],
+      heap.new()
+      |> heap.insert(#(#(source, source, 0.), 0.)),
     ),
     map.delete(_, source),
   )
 }
 
-// TODO: Implement using priority queue
 fn dijkstra_(
   g: Graph(vt, et),
   visited: Set(vt),
-  dists: Map(vt, Float),
-  node_queue: List(#(vt, vt, Float)),
+  node_queue: Heap(#(vt, vt, Float)),
 ) -> Result(Map(vt, vt), Nil) {
-  let node_queue =
-    node_queue
-    |> list.sort(fn(a: #(vt, vt, Float), b: #(vt, vt, Float)) {
-      assert Ok(a_dist) = map.get(dists, a.1)
-      assert Ok(b_dist) = map.get(dists, b.1)
-      let a = a_dist +. a.2
-      let b = b_dist +. b.2
-      float.compare(a, b)
-    })
-  case node_queue {
-    [] -> Ok(map.new())
-    [#(current, parent, weight), ..node_queue] ->
+  case heap.pop(node_queue) {
+    Error(_) -> Ok(map.new())
+    Ok(#(#(current, parent, dist), node_queue)) ->
       case set.contains(visited, current) {
-        True -> dijkstra_(g, visited, dists, node_queue)
+        True -> dijkstra_(g, visited, node_queue)
         False -> {
           try reachable = gleam_graph.reachable(g, current)
+          let visited =
+            visited
+            |> set.insert(current)
           let new_queue =
             reachable
             |> list.fold(
               from: node_queue,
               with: fn(acc, el: #(vt, Option(Float), Option(et))) {
-                [
-                  #(
-                    el.0,
-                    current,
-                    case el.1 {
-                      None -> 0.
-                      Some(n) -> n
-                    },
-                  ),
-                  ..acc
-                ]
+                let el_dist =
+                  dist +. case el.1 {
+                    None -> 0.
+                    Some(n) -> n
+                  }
+                let context = #(el.0, current, el_dist)
+                acc
+                |> heap.insert(#(context, el_dist))
               },
             )
-          try parent_dist = map.get(dists, parent)
-          let visited =
-            visited
-            |> set.insert(current)
-          let dists =
-            dists
-            |> map.insert(current, parent_dist +. weight)
           result.map(
-            dijkstra_(g, visited, dists, new_queue),
+            dijkstra_(g, visited, new_queue),
             fn(parents) { map.insert(parents, current, parent) },
           )
         }

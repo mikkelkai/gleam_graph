@@ -5,7 +5,6 @@
 //// However it is recommended to create a map where the keys are used as nodes in the graph instead of using the node directly.
 //// This allows changing the nodes without changing the graph, as well as often being faster, since simpler keys like numbers are faster to compare than complex types.
 
-import gleam/int
 import gleam/list
 import gleam/map
 import gleam/map.{Map}
