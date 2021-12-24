@@ -18,7 +18,7 @@ import data_structures/heap
 import data_structures/heap.{Heap}
 import gleam/erlang.{format}
 
-/// Function that computes a depth first search through the graph from a given node.
+/// Computes a depth first search through the graph from a given node.
 pub fn depth_first_search(
   g: Graph(vt, et),
   source: vt,
@@ -56,7 +56,7 @@ fn dfs(
   }
 }
 
-/// Function that computes a breadth first search through the graph from a given node.
+/// Computes a breadth first search through the graph from a given node.
 pub fn breadth_first_search(
   g: Graph(vt, et),
   source: vt,
@@ -104,7 +104,7 @@ fn bfs(
   }
 }
 
-/// Function that computes shortest distance through the graph from a given node.
+/// Computes shortest distance through the graph from a given node.
 pub fn dijkstra(g: Graph(vt, et), source: vt) -> Result(Map(vt, vt), Nil) {
   result.map(
     dijkstra_(

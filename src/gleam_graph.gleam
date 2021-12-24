@@ -12,24 +12,24 @@ import gleam/option
 import gleam/option.{None, Option, Some}
 
 // Types
-/// Type that represents edges in the graph.
+/// Represents edges in the graph.
 pub opaque type Edge(vt, et) {
   DirectedEdge(from: vt, to: vt, weight: Option(Float), data: Option(et))
   UndirectedEdge(between: #(vt, vt), weight: Option(Float), data: Option(et))
 }
 
-/// Type that represents the graph.
+/// Represents the graph.
 pub opaque type Graph(vt, et) {
   Graph(graph: Map(vt, List(Edge(vt, et))), order: Int, size: Int)
 }
 
 // Construction
-/// Function that creates a new empty graph.
+/// Creates a new empty graph.
 pub fn new() -> Graph(vt, et) {
   Graph(graph: map.new(), order: 0, size: 0)
 }
 
-/// Function that adds a new node to a graph.
+/// Adds a new node to a graph.
 pub fn add_node(g: Graph(vt, et), node: vt) -> Graph(vt, et) {
   Graph(..g, graph: map.insert(g.graph, node, []), order: g.order + 1)
 }
@@ -72,7 +72,7 @@ fn raw_add_edge(
   )
 }
 
-/// Function that adds a directed edge with a weight to the graph.
+/// Adds a directed edge with a weight to the graph.
 ///
 /// When referencing a vertex which does not exist in the graph, it will automatically be created.
 pub fn add_weighted_edge(
@@ -85,7 +85,7 @@ pub fn add_weighted_edge(
   raw_add_edge(g, from, to, Some(weight), data)
 }
 
-/// Function that adds a directed edge to the graph.
+/// Adds a directed edge to the graph.
 ///
 /// When referencing a vertex which does not exist in the graph, it will automatically be created.
 pub fn add_edge(g: Graph(vt, et), from: vt, to: vt, data: Option(et)) {
@@ -121,7 +121,7 @@ fn raw_add_undirected_edge(
   )
 }
 
-/// Function that adds an undirected edge with a weight to the graph.
+/// Adds an undirected edge with a weight to the graph.
 ///
 /// When referencing a vertex which does not exist in the graph, it will automatically be created.
 pub fn add_weighted_undirected_edge(
@@ -134,7 +134,7 @@ pub fn add_weighted_undirected_edge(
   raw_add_undirected_edge(g, from, to, Some(weight), data)
 }
 
-/// Function that adds an undirected edge to the graph.
+/// Adds an undirected edge to the graph.
 ///
 /// When referencing a vertex which does not exist in the graph, it will automatically be created.
 pub fn add_undirected_edge(g: Graph(vt, et), from: vt, to: vt, data: Option(et)) {
@@ -142,23 +142,23 @@ pub fn add_undirected_edge(g: Graph(vt, et), from: vt, to: vt, data: Option(et))
 }
 
 // Operations
-/// Function that returns the amount of nodes in the graph.
+/// Returns the amount of nodes in the graph.
 pub fn order(g: Graph(vt, et)) -> Int {
   g.order
 }
 
-/// Function that returns the amount of edges in the graph.
+/// Returns the amount of edges in the graph.
 pub fn size(g: Graph(vt, et)) -> Int {
   g.size
 }
 
-/// Function that returns the number of edges going from a given node.
+/// Returns the number of edges going from a given node.
 pub fn out_degree(g: Graph(vt, et), node: vt) -> Result(Int, Nil) {
   try edges = map.get(g.graph, node)
   Ok(list.length(edges))
 }
 
-/// Function that returns a tuple describing what is reachable for a node.
+/// Returns a tuple describing what is reachable for a node.
 pub fn reachable(
   g: Graph(vt, et),
   node: vt,
@@ -179,7 +179,7 @@ pub fn reachable(
   ))
 }
 
-/// Function that returns the nodes which can be used to reached from a given node.
+/// Returns the nodes which can be used to reached from a given node.
 pub fn reachable_nodes(g: Graph(vt, et), node: vt) -> Result(List(vt), Nil) {
   try r = reachable(g, node)
   Ok(list.map(r, fn(edge: #(vt, Option(Float), Option(et))) { edge.0 }))
