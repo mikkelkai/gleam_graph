@@ -1,7 +1,12 @@
+import gleeunit
 import gleam_graph
 import gleam/io
 import gleam/option.{None, Some}
 import gleam/erlang.{format}
+
+pub fn main() {
+  gleeunit.main()
+}
 
 pub fn new_test() {
   let graph = gleam_graph.new()
